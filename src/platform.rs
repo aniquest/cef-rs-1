@@ -41,28 +41,50 @@ pub mod windows {
     pub window: *const c_void,
   }
   impl WindowInfo {
-    #[allow(non_snake_case)]
+    const CW_USEDEFAULT: u32 = 0x80000000u32;
+    const WS_CLIPCHILDREN: u32 = 0x02000000u32;
+    const WS_CLIPSIBLINGS: u32 = 0x04000000u32;
+    const WS_VISIBLE: u32 = 0x10000000u32;
+    const WS_TILEDWINDOW: u32 =  0x00C00000u32 | 0x00080000u32 | 0x00040000u32 | 0x00010000u32 | 0x00020000u32;
+    const WS_CHILD: u32 = 0x40000000u32;
+    const WS_TABSTOP: u32 =0x00010000u32;
+
     pub fn default() -> Self {
-      let CW_USEDEFAULT = 0x80000000u32;
-      let WS_CLIPCHILDREN = 0x02000000u32;
-      let WS_CLIPSIBLINGS = 0x04000000u32;
-      let WS_VISIBLE = 0x10000000u32;
-      let WS_TILEDWINDOW =  0x00C00000u32 | 0x00080000u32 | 0x00040000u32 | 0x00010000u32 | 0x00020000u32;
-      let window_style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | WS_TILEDWINDOW;
+      let separate_window_window_style
+        = WindowInfo::WS_CLIPCHILDREN
+        | WindowInfo::WS_CLIPSIBLINGS
+        | WindowInfo::WS_VISIBLE
+        | WindowInfo::WS_TILEDWINDOW;
+
       return WindowInfo {
         ex_style: 0u32,
         window_name: CefString::from("Rust CEF"),
-        style: window_style,
-        x: CW_USEDEFAULT,
-        y: CW_USEDEFAULT,
-        width: CW_USEDEFAULT,
-        height: CW_USEDEFAULT,
+        style: separate_window_window_style,
+        x: WindowInfo::CW_USEDEFAULT,
+        y: WindowInfo::CW_USEDEFAULT,
+        width: WindowInfo::CW_USEDEFAULT,
+        height: WindowInfo::CW_USEDEFAULT,
         parent_window: std::ptr::null(),
         menu: std::ptr::null(),
         windowless_rendering_enabled: 0i32,
         shared_texture_enabled: 0,
         external_begin_frame_enabled: 0,
         window: std::ptr::null()
+      }
+    }
+
+    #[allow(non_snake_case)]
+    pub fn as_child_window() -> Self {
+      let as_child_window_style
+        = WindowInfo::WS_CHILD
+        | WindowInfo::WS_CLIPCHILDREN
+        | WindowInfo::WS_CLIPSIBLINGS
+        | WindowInfo::WS_TABSTOP
+        | WindowInfo::WS_VISIBLE;
+
+      return WindowInfo {
+        style: as_child_window_style,
+        .. WindowInfo::default()
       }
     }
   }
