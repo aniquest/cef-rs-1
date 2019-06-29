@@ -7,6 +7,7 @@ pub mod browser;
 pub mod platform;
 pub mod settings;
 
+extern crate cef_sys;
 extern crate libc;
 use libc::{c_int, c_void};
 
@@ -73,4 +74,8 @@ pub fn do_message_loop_work() {
 }
 pub fn shutdown(){
 	unsafe { cef_shutdown() };
+}
+
+pub fn copy_cef_binaries_to_target() {
+  cef_sys::copy_cef_binaries_to_target();
 }
