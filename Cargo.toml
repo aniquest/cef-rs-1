@@ -6,7 +6,7 @@ repository = "https://github.com/peter-suggate/cef-rs"
 build = "build.rs"
 
 [dependencies]
-cef-sys = { path = "../cef-sys" }
+cef-sys = { git = "https://github.com/peter-suggate/cef-sys" }
 libc = "0.2.58"
 
 [build-dependencies]
