@@ -14,7 +14,7 @@ use libc::{c_int, c_void};
 use app::App;
 use cef_string::CefString;
 use settings::{AppSettings, BrowserSettings};
-use browser::{Client};
+use browser::{Client, Browser};
 // use platform::linux::{WindowInfo, MainArgs};
 use platform::windows::{WindowInfo, MainArgs};
 
@@ -25,7 +25,7 @@ extern "C" {
 	fn cef_execute_process(args: *const MainArgs, app: *mut App, win_sandbox_info: *mut c_int) -> c_int;
 	fn cef_initialize(args: *const MainArgs, settings: *mut AppSettings, app: *mut App, win_sandbox_info: *mut c_int ) -> c_int;
 	fn cef_browser_host_create_browser(window_info: *const WindowInfo, client: *mut Client, url: *const CefString, browser_settings: *const BrowserSettings, extra_info: *mut c_void, request_context: *mut c_void) -> c_int;
-	fn cef_browser_host_create_browser_sync(window_info: *const WindowInfo, client: *mut Client, url: *const CefString, browser_settings: *const BrowserSettings, extra_info: *mut c_void, request_context: *mut c_void) -> c_int;
+	fn cef_browser_host_create_browser_sync(window_info: *const WindowInfo, client: *mut Client, url: *const CefString, browser_settings: *const BrowserSettings, extra_info: *mut c_void, request_context: *mut c_void) -> *mut Browser;
 	fn cef_run_message_loop();
   fn cef_do_message_loop_work();
 	fn cef_shutdown();
@@ -63,7 +63,7 @@ pub fn browser_host_create_browser_sync(
   browser_settings: *const BrowserSettings,
   extra_info: *mut c_void,
   request_context: *mut c_void
-) -> c_int {
+) -> *mut Browser {
 	unsafe { return cef_browser_host_create_browser_sync(window_info, client, url, browser_settings, extra_info, request_context); }
 }
 pub fn run_message_loop(){
